@@ -1,6 +1,0 @@
-"/Users/ovd/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/CLion.app/Contents/bin/cmake/mac/bin/cmake" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=/Users/ovd/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/232.9921.42/CLion.app/Contents/bin/ninja/mac/ninja" -G Ninja -S /Users/ovd/CLionProjects/bifrost -B /Users/ovd/CLionProjects/bifrost/cmake-build-debug
--- Proceeding with version: 23.5.26.38
--- CMAKE_CXX_FLAGS: 
--- Configuring done (1.7s)
--- Generating done (0.0s)
--- Build files have been written to: /Users/ovd/CLionProjects/bifrost/cmake-build-debug

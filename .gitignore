@@ -146,3 +146,4 @@ iosLibs
 # Get-ChildItem -Path . -Filter *.hprof -Recurse -ErrorAction SilentlyContinue -Force -File
 
 flatbuffers
+cmake-build-debug
