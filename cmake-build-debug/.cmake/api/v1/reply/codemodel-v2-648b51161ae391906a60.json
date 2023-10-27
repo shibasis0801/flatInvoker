@@ -1,0 +1,167 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.26"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						3
+					]
+				},
+				{
+					"build" : "_deps/flatbuffers-build",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-_deps.flatbuffers-build-Debug-628a2aff2e0c7f5c7587.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "cmake-build-debug/_deps/flatbuffers-src",
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						4,
+						5,
+						6,
+						7,
+						8
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "bifrost",
+					"targetIndexes" : 
+					[
+						0,
+						3
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "FlatBuffers",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						4,
+						5,
+						6,
+						7,
+						8
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "bifrost::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-bifrost-Debug-71ce8bc732390c6ecf9d.json",
+					"name" : "bifrost",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "flatbuffers::@62cadad892676421df77",
+					"jsonFile" : "target-flatbuffers-Debug-886f97c886db0893bc91.json",
+					"name" : "flatbuffers",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "flatc::@62cadad892676421df77",
+					"jsonFile" : "target-flatc-Debug-4dbae1dd8ba384b640ee.json",
+					"name" : "flatc",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "flatrpc::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-flatrpc-Debug-ccbedcb43a2e8c3d5d76.json",
+					"name" : "flatrpc",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "flatsample::@62cadad892676421df77",
+					"jsonFile" : "target-flatsample-Debug-88f20dcca174b8127b32.json",
+					"name" : "flatsample",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "flatsamplebfbs::@62cadad892676421df77",
+					"jsonFile" : "target-flatsamplebfbs-Debug-e0095f1bc7f9a873b6d7.json",
+					"name" : "flatsamplebfbs",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "flatsamplebinary::@62cadad892676421df77",
+					"jsonFile" : "target-flatsamplebinary-Debug-539f86002f345aed2a0f.json",
+					"name" : "flatsamplebinary",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "flatsampletext::@62cadad892676421df77",
+					"jsonFile" : "target-flatsampletext-Debug-9d08429fe339567769da.json",
+					"name" : "flatsampletext",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "flattests::@62cadad892676421df77",
+					"jsonFile" : "target-flattests-Debug-0a26d92172c923d078a5.json",
+					"name" : "flattests",
+					"projectIndex" : 1
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/ovd/CLionProjects/bifrost/cmake-build-debug",
+		"source" : "/Users/ovd/CLionProjects/bifrost"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 5
+	}
+}

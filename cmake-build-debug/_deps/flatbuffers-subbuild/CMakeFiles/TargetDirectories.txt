@@ -1,0 +1,3 @@
+/Users/ovd/CLionProjects/bifrost/cmake-build-debug/_deps/flatbuffers-subbuild/CMakeFiles/flatbuffers-populate.dir
+/Users/ovd/CLionProjects/bifrost/cmake-build-debug/_deps/flatbuffers-subbuild/CMakeFiles/edit_cache.dir
+/Users/ovd/CLionProjects/bifrost/cmake-build-debug/_deps/flatbuffers-subbuild/CMakeFiles/rebuild_cache.dir

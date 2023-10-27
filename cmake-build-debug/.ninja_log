@@ -1,0 +1,8 @@
+# ninja log v5
+0	577	1698241287810708955	_deps/flatbuffers-build/CMakeFiles/flatbuffers.dir/src/util.cpp.o	fc46fcaaaf532c76
+506	555	1698243425207775591	flatrpc	2cafd235e74d013e
+0	801	1698241288033363149	_deps/flatbuffers-build/CMakeFiles/flatbuffers.dir/src/reflection.cpp.o	c69ed07a41f750c5
+0	2292	1698241289519581415	_deps/flatbuffers-build/CMakeFiles/flatbuffers.dir/src/idl_parser.cpp.o	6bdf01be78c6a5b6
+8	116	1698243407669156000	_deps/flatbuffers-build/libflatbuffers.a	126ad8e23e87b849
+0	1010	1698241288242773550	_deps/flatbuffers-build/CMakeFiles/flatbuffers.dir/src/idl_gen_text.cpp.o	b19ceae7e0fe06f1
+6	506	1698243425156475628	CMakeFiles/flatrpc.dir/rpc-generator/main.cpp.o	93a35c5590ee9fe3
