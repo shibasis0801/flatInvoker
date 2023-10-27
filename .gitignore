@@ -147,3 +147,4 @@ iosLibs
 
 flatbuffers
 cmake-build-debug
+CMakeFiles
