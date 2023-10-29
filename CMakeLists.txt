@@ -1,27 +1,33 @@
 cmake_minimum_required(VERSION 3.22.1)
-project(bifrost)
+project(flatInvoker)
 set(CMAKE_CXX_STANDARD 20)
 
-include(FetchContent)
-FetchContent_Declare(
+include_directories(.)
+
+add_subdirectory(
         flatbuffers
-        GIT_REPOSITORY https://github.com/google/flatbuffers.git
-        GIT_TAG        master
+        ${CMAKE_CURRENT_BINARY_DIR}/flatbuffers-build
 )
 
-FetchContent_GetProperties(flatbuffers)
-if(NOT flatbuffers_POPULATED)
-    FetchContent_Populate(flatbuffers)
-    add_subdirectory(${flatbuffers_SOURCE_DIR} ${flatbuffers_BINARY_DIR})
-endif()
+file(GLOB runtime "rpc-runtime/*")
+file(GLOB generator "rpc-generator/*")
+file(GLOB core "core-cpp/*")
 
-add_executable(flatrpc rpc-generator/main.cpp
-        core-cpp/base.h)
+# This is the CLI to generate the data classes and interfaces
+add_executable(
+        flatrpc
+        ${runtime}
+        ${generator}
+        ${core}
+)
 target_link_libraries(flatrpc flatbuffers)
 
-
-add_library(bifrost rpc-runtime/library.cpp
-        core-cpp/base.h)
-target_link_libraries(bifrost flatbuffers)
-
-
+# This is the runtime library that is added to targets
+add_library(flatInvoker
+        SHARED
+        ${runtime}
+        ${core}
+)
+target_link_libraries(flatInvoker
+        flatbuffers)
+target_include_directories(flatInvoker PUBLIC .)

@@ -5,6 +5,10 @@ extern "C" {
 #endif
 
 int reaktorTest();
+//
+//struct DarwinChannel {
+//    int (*readInt)();
+//};
 
 #ifdef __cplusplus
 }

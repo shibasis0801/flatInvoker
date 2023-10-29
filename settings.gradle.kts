@@ -1,6 +1,6 @@
 import java.nio.file.*
 
-rootProject.name = "Bifrost"
+rootProject.name = "flatInvoker"
 
 pluginManagement {
     repositories {
@@ -51,6 +51,7 @@ If we setup that, these hacks should not be needed.
 
 
 gitDependency("flatbuffers", "https://github.com/google/flatbuffers.git")
+gitDependency("googletest", "https://github.com/google/googletest.git")
 
 include("flatbuffers-kotlin", "flatbuffers/kotlin/flatbuffers-kotlin")
 includeBuild("test-kmm")

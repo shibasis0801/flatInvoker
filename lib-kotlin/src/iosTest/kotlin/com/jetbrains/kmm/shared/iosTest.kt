@@ -9,7 +9,7 @@ class GreetingTest {
     @Test
     fun testExample() {
         assertTrue(Greeting().greeting().contains("iOS"), "Check iOS is mentioned")
-        assertTrue(Platform().data == 12, "Able to call C++")
+        assertTrue(Platform().data == 42, "Able to call C++")
         println(Platform().data)
     }
 }

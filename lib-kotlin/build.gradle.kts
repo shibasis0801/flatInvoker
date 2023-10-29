@@ -23,12 +23,17 @@ kotlin {
             baseName = "shared"
         }
 
+        // See this
+        // https://www.youtube.com/watch?v=Z2PHpxVD9_s&ab_channel=Xebia
+
         it.compilations.getByName("main").cinterops {
             val reaktor by creating {
                 defFile(file("cpp/reaktor.def"))
                 headers("cpp/Reaktor.h")
                 extraOpts("-Xsource-compiler-option", "-std=c++20")
+//                extraOpts("-Xsource-compiler-option", "-stdlib=libc++")
                 extraOpts("-Xcompile-source", "cpp/Reaktor.cpp")
+//                extraOpts("-Xsource-compiler-option", "-I../../core-cpp")
             }
         }
     }
@@ -37,6 +42,7 @@ kotlin {
         all {
             languageSettings.apply {
                 optIn("kotlin.experimental.ExperimentalNativeApi")
+                optIn("kotlin.ExperimentalUnsignedTypes")
             }
         }
 
@@ -58,10 +64,13 @@ kotlin {
             }
         }
 
-        val androidUnitTest by getting {
+        val androidInstrumentedTest by getting {
             dependencies {
                 implementation(kotlin("test-junit"))
                 implementation("junit:junit:4.13.2")
+                implementation("androidx.test.ext:junit:1.1.3")
+                implementation("androidx.test.ext:junit-ktx:1.1.3")
+                implementation("androidx.test.espresso:espresso-core:3.4.0")
             }
         }
     }
@@ -80,6 +89,7 @@ android {
                 cppFlags.add("-std=c++17")
             }
         }
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     externalNativeBuild {
         cmake {
@@ -95,4 +105,12 @@ android {
     buildFeatures {
         prefab = true
     }
+
+    packagingOptions {
+        pickFirst("**/libc++_shared.so") // dangerous
+        pickFirst("**/libfolly_runtime.so")
+        pickFirst("**/libglog.so")
+        pickFirst("**/libfbjni.so")
+    }
+
 }

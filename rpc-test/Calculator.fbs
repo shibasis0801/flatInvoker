@@ -26,3 +26,110 @@ table SortResponse {
 rpc_service Sorter {
     Sort(SortRequest):SortResponse;
 }
+
+
+
+
+// camera photo
+// record voice
+// location
+// http call
+// user logged in
+
+
+table Photo {
+    data: [byte];
+    name: string;
+    location: string;
+    time: int;
+}
+
+rpc_service Camera {
+    TakePhoto(void):Photo;
+}
+
+// generate a java interface for the above
+
+public class Photo {
+    public byte[] data;
+    public string name;
+    public string location;
+    public int time;
+}
+
+public interface Camera {
+    Photo TakePhoto();
+}
+
+// typescript
+
+type Photo = {
+    data: Uint8Array;
+    name: string;
+    location: string;
+    time: number;
+}
+
+type Camera = {
+    TakePhoto(): Photo;
+}
+
+
+// java
+public class JavaCamera implements Camera {
+    public Photo TakePhoto() {
+        // take photo
+        // return photo
+    }
+}
+registerCamera(new JavaCamera())
+
+
+// js
+getCamera().takePhoto()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
