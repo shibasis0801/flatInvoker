@@ -35,17 +35,25 @@ kotlin {
         ios.deploymentTarget = "16.0"
         podfile = project.file("../app-ios/Podfile")
         framework {
-            baseName = "lib_core"
+            baseName = "lib_network"
             isStatic = true
         }
     }
     
     sourceSets {
         commonMain.dependencies {
-            //put your multiplatform dependencies here
+            api(project(":lib-core"))
+            api("io.ktor:ktor-client-core:2.3.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+        androidMain.dependencies {
+            api("io.ktor:ktor-client-okhttp:2.3.0")
+
+        }
+        iosMain.dependencies {
+            api("io.ktor:ktor-client-darwin:2.3.0")
         }
         val androidInstrumentedTest by getting {
             dependencies {
@@ -61,7 +69,7 @@ kotlin {
 }
 
 android {
-    namespace = "dev.shibasis.reaktor.core"
+    namespace = "dev.shibasis.reaktor.network"
     compileSdk = 34
     defaultConfig {
         minSdk = 24
@@ -92,8 +100,8 @@ task("buildReleaseBinaries") {
     dependsOn("assembleRelease", "podPublishReleaseXCFramework")
     doLast {
         // Define the paths to the AAR and XCFramework files
-        val aarFilePath = "${project.buildDir}/outputs/aar/lib-core-release.aar"
-        val xcFrameworkFilePath = "${project.buildDir}/cocoapods/publish/release/lib_core.xcframework/ios-arm64/lib_core.framework/lib_core"
+        val aarFilePath = "${project.buildDir}/outputs/aar/lib-network-release.aar"
+        val xcFrameworkFilePath = "${project.buildDir}/cocoapods/publish/release/lib_network.xcframework/ios-arm64/lib_network.framework/lib_network"
 
         val sizeInKb = { filePath: String ->
             round(Files.size(Paths.get(filePath)) / 1024.0)

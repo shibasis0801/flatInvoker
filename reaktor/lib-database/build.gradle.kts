@@ -11,7 +11,18 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.sqldelight)
 }
+
+sqldelight {
+    databases {
+        create("PrimaryDatabase") {
+            packageName.set("dev.shibasis.reaktor.database")
+            generateAsync.set(true)
+        }
+    }
+}
+
 
 kotlin {
     androidTarget {
@@ -35,17 +46,27 @@ kotlin {
         ios.deploymentTarget = "16.0"
         podfile = project.file("../app-ios/Podfile")
         framework {
-            baseName = "lib_core"
+            baseName = "lib_database"
             isStatic = true
         }
     }
     
     sourceSets {
         commonMain.dependencies {
-            //put your multiplatform dependencies here
+            api(project(":lib-core"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+        androidMain.dependencies {
+            api("app.cash.sqldelight:android-driver:2.0.0")
+
+//            api(libs.sqldelight.android)
+        }
+        iosMain.dependencies {
+            api("app.cash.sqldelight:native-driver:2.0.0")
+
+//            api(libs.sqldelight.native)
         }
         val androidInstrumentedTest by getting {
             dependencies {
@@ -61,7 +82,7 @@ kotlin {
 }
 
 android {
-    namespace = "dev.shibasis.reaktor.core"
+    namespace = "dev.shibasis.reaktor.database"
     compileSdk = 34
     defaultConfig {
         minSdk = 24
@@ -92,8 +113,8 @@ task("buildReleaseBinaries") {
     dependsOn("assembleRelease", "podPublishReleaseXCFramework")
     doLast {
         // Define the paths to the AAR and XCFramework files
-        val aarFilePath = "${project.buildDir}/outputs/aar/lib-core-release.aar"
-        val xcFrameworkFilePath = "${project.buildDir}/cocoapods/publish/release/lib_core.xcframework/ios-arm64/lib_core.framework/lib_core"
+        val aarFilePath = "${project.buildDir}/outputs/aar/lib-database-release.aar"
+        val xcFrameworkFilePath = "${project.buildDir}/cocoapods/publish/release/lib_database.xcframework/ios-arm64/lib_database.framework/lib_database"
 
         val sizeInKb = { filePath: String ->
             round(Files.size(Paths.get(filePath)) / 1024.0)
@@ -119,5 +140,8 @@ task("buildReleaseBinaries") {
         println("Built Android AAR and Apple XCFramework")
         println(dataLine)
     }
+}
+dependencies {
+    implementation("androidx.activity:activity-ktx:1.8.2")
 }
 
