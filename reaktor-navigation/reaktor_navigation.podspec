@@ -1,35 +1,35 @@
 Pod::Spec.new do |spec|
-    spec.name                     = 'reaktor_core'
+    spec.name                     = 'reaktor_navigation'
     spec.version                  = '1.0'
     spec.homepage                 = 'Link to the Shared Module homepage'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
     spec.license                  = ''
     spec.summary                  = 'Some description for the Shared Module'
-    spec.vendored_frameworks      = 'build/cocoapods/framework/reaktor_core.framework'
+    spec.vendored_frameworks      = 'build/cocoapods/framework/reaktor_navigation.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target = '12'
                 
                 
-    if !Dir.exist?('build/cocoapods/framework/reaktor_core.framework') || Dir.empty?('build/cocoapods/framework/reaktor_core.framework')
+    if !Dir.exist?('build/cocoapods/framework/reaktor_navigation.framework') || Dir.empty?('build/cocoapods/framework/reaktor_navigation.framework')
         raise "
 
-        Kotlin framework 'reaktor_core' doesn't exist yet, so a proper Xcode project can't be generated.
+        Kotlin framework 'reaktor_navigation' doesn't exist yet, so a proper Xcode project can't be generated.
         'pod install' should be executed after running ':generateDummyFramework' Gradle task:
 
-            ./gradlew :reaktor-core:generateDummyFramework
+            ./gradlew :reaktor-navigation:generateDummyFramework
 
         Alternatively, proper pod installation is performed during Gradle sync in the IDE (if Podfile location is set)"
     end
                 
     spec.pod_target_xcconfig = {
-        'KOTLIN_PROJECT_PATH' => ':reaktor-core',
-        'PRODUCT_MODULE_NAME' => 'reaktor_core',
+        'KOTLIN_PROJECT_PATH' => ':reaktor-navigation',
+        'PRODUCT_MODULE_NAME' => 'reaktor_navigation',
     }
                 
     spec.script_phases = [
         {
-            :name => 'Build reaktor_core',
+            :name => 'Build reaktor_navigation',
             :execution_position => :before_compile,
             :shell_path => '/bin/sh',
             :script => <<-SCRIPT
@@ -46,5 +46,5 @@ Pod::Spec.new do |spec|
             SCRIPT
         }
     ]
-                
+    spec.resources = ['build/compose/ios/reaktor_navigation/compose-resources']
 end
