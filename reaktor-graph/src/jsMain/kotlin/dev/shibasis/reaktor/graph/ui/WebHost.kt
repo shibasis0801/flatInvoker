@@ -1,9 +1,8 @@
-package dev.shibasis.reaktor.web
+package dev.shibasis.reaktor.graph.ui
 
 import dev.shibasis.reaktor.graph.Reaktor
 import dev.shibasis.reaktor.graph.core.Graph
 import dev.shibasis.reaktor.graph.navigation.WebNavigationBridge
-import dev.shibasis.reaktor.graph.ui.ReactGraphContent
 import react.ReactNode as Component
 import kotlin.js.JsExport
 
