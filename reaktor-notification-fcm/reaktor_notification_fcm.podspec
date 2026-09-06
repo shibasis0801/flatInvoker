@@ -1,31 +1,32 @@
 Pod::Spec.new do |spec|
-    spec.name                     = 'reaktor_tactile'
+    spec.name                     = 'reaktor_notification_fcm'
     spec.version                  = '1.0'
     spec.homepage                 = 'Link to the Shared Module homepage'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
     spec.license                  = ''
     spec.summary                  = 'Some description for the Shared Module'
-    spec.vendored_frameworks      = 'build/cocoapods/framework/reaktor_tactile.framework'
+    spec.vendored_frameworks      = 'build/cocoapods/framework/reaktor_notification_fcm.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target    = '13'
-    if !Dir.exist?('build/cocoapods/framework/reaktor_tactile.framework') || Dir.empty?('build/cocoapods/framework/reaktor_tactile.framework')
+    spec.dependency 'FirebaseMessaging', '11.0'
+    if !Dir.exist?('build/cocoapods/framework/reaktor_notification_fcm.framework') || Dir.empty?('build/cocoapods/framework/reaktor_notification_fcm.framework')
         raise "
-        Kotlin framework 'reaktor_tactile' doesn't exist yet, so a proper Xcode project can't be generated.
+        Kotlin framework 'reaktor_notification_fcm' doesn't exist yet, so a proper Xcode project can't be generated.
         'pod install' should be executed after running ':generateDummyFramework' Gradle task:
-            ./gradlew :reaktor-tactile:generateDummyFramework
+            ./gradlew :reaktor-notification-fcm:generateDummyFramework
         Alternatively, proper pod installation is performed during Gradle sync in the IDE (if Podfile location is set)"
     end
     spec.xcconfig = {
         'ENABLE_USER_SCRIPT_SANDBOXING' => 'NO',
     }
     spec.pod_target_xcconfig = {
-        'KOTLIN_PROJECT_PATH' => ':reaktor-tactile',
-        'PRODUCT_MODULE_NAME' => 'reaktor_tactile',
+        'KOTLIN_PROJECT_PATH' => ':reaktor-notification-fcm',
+        'PRODUCT_MODULE_NAME' => 'reaktor_notification_fcm',
     }
     spec.script_phases = [
         {
-            :name => 'Build reaktor_tactile',
+            :name => 'Build reaktor_notification_fcm',
             :execution_position => :before_compile,
             :shell_path => '/bin/sh',
             :script => <<-SCRIPT
