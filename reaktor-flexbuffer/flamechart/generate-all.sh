@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 #
-# Generate flamecharts for all Kotlin Multiplatform targets.
+# Generate flamecharts for JVM, Android unit tests and Node.js.
 #
 # Each target has different performance characteristics:
 #   JVM     — HotSpot C2 JIT, G1 GC, escape analysis, scalar replacement
 #   Android — Same HotSpot for unit tests; ART + Bionic for device (separate script)
-#   Native  — Kotlin/Native (LLVM backend), no GC pauses, no JIT warmup
 #   JS      — V8 TurboFan JIT, BigInt longs, UTF-16 strings, ArrayBuffer bytes
 #
 # Usage:
@@ -13,7 +12,6 @@
 #   ./flamechart/generate-all.sh           # Generate all flamecharts
 #   ./flamechart/generate-all.sh jvm       # Only JVM
 #   ./flamechart/generate-all.sh js        # Only JS
-#   ./flamechart/generate-all.sh native    # Only Native (iOS simulator)
 #   ./flamechart/generate-all.sh android   # Only Android unit tests
 #
 set -euo pipefail
@@ -37,7 +35,7 @@ echo ""
 
 run_jvm() {
     echo "━━━ [JVM] HotSpot flamechart ━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    bash "$SCRIPT_DIR/generate-jvm.sh"
+    ./gradlew :reaktor-flexbuffer:jvmFlameChart
     echo ""
 }
 
@@ -47,11 +45,6 @@ run_android() {
     echo ""
 }
 
-run_native() {
-    echo "━━━ [Native] Kotlin/Native (iOS simulator) flamechart ━━"
-    bash "$SCRIPT_DIR/generate-native.sh"
-    echo ""
-}
 
 run_js() {
     echo "━━━ [JS] V8/Node.js flamechart ━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -62,17 +55,15 @@ run_js() {
 case "$TARGET" in
     jvm)     run_jvm ;;
     android) run_android ;;
-    native)  run_native ;;
     js)      run_js ;;
     all)
         run_jvm
         run_android
-        run_native
         run_js
         ;;
     *)
         echo "Unknown target: $TARGET"
-        echo "Usage: $0 [jvm|android|native|js|all]"
+        echo "Usage: $0 [jvm|android|js|all]"
         exit 1
         ;;
 esac
@@ -80,7 +71,7 @@ esac
 echo "╔══════════════════════════════════════════════════════════╗"
 echo "║  Flamechart generation complete!                         ║"
 echo "║  Output files:                                           ║"
-for f in "$OUTPUT_DIR"/*.html "$OUTPUT_DIR"/*.cpuprofile "$OUTPUT_DIR"/*.txt 2>/dev/null; do
-    [ -f "$f" ] && echo "║    $(basename "$f")"
+for f in "$OUTPUT_DIR"/*.html "$OUTPUT_DIR"/*.cpuprofile "$OUTPUT_DIR"/*.txt; do
+    if [ -f "$f" ]; then echo "║    $(basename "$f")"; fi
 done
 echo "╚══════════════════════════════════════════════════════════╝"

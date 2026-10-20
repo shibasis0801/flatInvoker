@@ -1,24 +1,44 @@
-import dev.shibasis.dependeasy.web.*
-import dev.shibasis.dependeasy.android.*
-import dev.shibasis.dependeasy.common.*
-import dev.shibasis.dependeasy.server.*
-import dev.shibasis.dependeasy.darwin.*
+import dev.shibasis.dependeasy.components.library
+import dev.shibasis.dependeasy.codegen.KotlinTemplate
+import dev.shibasis.dependeasy.model.*
+import dev.shibasis.dependeasy.configuration.FrameworkOptions
+import dev.shibasis.dependeasy.Versions
+import dev.shibasis.dependeasy.configuration.option
 
-plugins {
-    id("dev.shibasis.dependeasy.library")
-}
-kotlin {
-    common {
-        dependencies {
-            api(project(":reaktor-graph"))
+plugins { id("dev.shibasis.dependeasy.library") }
+library(namespace = "dev.shibasis.reaktor.web", targets = Targets.All) {
+    dependencies {
+        common { api(projects.reaktorGraphRuntime) }
+        android { api(Versions.Android.WebView) }
+        androidInstrumentedTest {
+            implementation(Versions.Android.TestRunner)
+            implementation(Versions.Android.TestJUnit)
         }
     }
-    droid {}
-    darwin {}
-    web {}
-    server {}
-}
-
-android {
-    defaults("dev.shibasis.reaktor.web")
+    val desktopWebViewNative by desktopNative(target = "ReaktorWebView", defines = mapOf(
+        "CMAKE_OSX_DEPLOYMENT_TARGET" to Versions.SDK.targetMacos,
+        "REAKTOR_WEBVIEW_WEBKITGTK_API" to Versions.WebView.WebKitGtkApi,
+        "REAKTOR_WEBVIEW_WINDOWS_SDK" to Versions.WebView.WindowsSDK,
+        "REAKTOR_WEBVIEW_COMMIT" to Versions.WebView.commit,
+        "REAKTOR_WEBVIEW_SHA256" to Versions.WebView.archiveSha256,
+    ))
+    // Callable probe fixtures are qualified through the host probes and testWebBridge.
+    val browserFixtures by tests(Suite.JavaScript, environment = TestEnvironment(allowEmpty = true))
+    val androidFixtures by tests(Suite.AndroidUnit, environment = TestEnvironment(
+        discovery = TestDiscovery.Annotations, allowEmpty = true))
+    val jvmDesktopWebViewProbeClasspath by classpath(output = "reports/webview/probe-classpath.txt")
+    val desktopWebViewProbe by program(compilation = CompilationRef.Test,
+        environment = ProgramEnvironment(nativeAccess = true), run = Run.onDesktopSession())
+    val webBridge by javascript()
+    val compileBridge = webBridge.script(PackageScript("build"), "js/dist")
+    val testBridge = webBridge.tests(after = compileBridge)
+    val installWebBridge by artifacts(webBridge.installation)
+    val compileWebBridge by artifacts(compileBridge)
+    val testWebBridge by verify(Verification.WebBridge, testBridge)
+    if (project.option(FrameworkOptions.DeviceProbe).get()) {
+        val webViewProbe by appleTestFramework(baseName = "ReaktorWebProbe")
+    }
+    val WebBridgeAssets by generated(KotlinTemplate(namespace = "dev.shibasis.reaktor.web", assets = mapOf(
+        "entry" to "js/dist/browser-entry.js", "client" to "js/dist/index.js",
+    )), from = compileBridge)
 }

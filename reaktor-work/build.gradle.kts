@@ -1,31 +1,20 @@
-import dev.shibasis.dependeasy.web.*
-import dev.shibasis.dependeasy.android.*
-import dev.shibasis.dependeasy.common.*
-import dev.shibasis.dependeasy.server.*
-import dev.shibasis.dependeasy.darwin.*
-import dev.shibasis.dependeasy.dependencies.useKoin
+import dev.shibasis.dependeasy.Versions
+import dev.shibasis.dependeasy.components.library
+import dev.shibasis.dependeasy.model.Targets
 
-plugins {
-    id("org.jetbrains.compose")
-    id("org.jetbrains.kotlin.plugin.compose")
-    id("com.android.library")
-    id("dev.shibasis.dependeasy.library")
-}
+plugins { id("dev.shibasis.dependeasy.library") }
 
-kotlin {
-    common {
-        dependencies {
-            api(project(":reaktor-core"))
-            api("dev.mattramotar.meeseeks:runtime:1.0.2")
-        }
+library(namespace = "dev.shibasis.reaktor.work", targets = Targets.Android + Targets.Apple + Targets.Web + Targets.Jvm) {
+    dependencies {
+        common { api(projects.reaktorCore); api(projects.reaktorGraphRuntime); api(projects.reaktorAuthCore) }
+        commonTest { implementation(Versions.Kotlin.CoroutinesTest) }
+        android { api(Versions.Android.WorkManager) }
+        jvm { api(Versions.Server.Quartz) }
+        jvmTest { implementation(Versions.Data.SqlDelightSQLite) }
     }
-    droid {}
-    darwin {}
-    web {}
-    server {}
-    useKoin()
-}
-
-android {
-    defaults("dev.shibasis.reaktor.work")
+    val verifyWorkRuntimeBoundary by boundary(
+        groupPrefixes = listOf("androidx.compose", "org.jetbrains.compose", "org.jetbrains.skiko", "ai.bestbuds"),
+        groupFragments = listOf("meeseeks"),
+        modules = listOf("reaktor-graph", "reaktor-ui", "engine", "kernel"),
+        reason = "Work has vendor or frontend dependencies")
 }

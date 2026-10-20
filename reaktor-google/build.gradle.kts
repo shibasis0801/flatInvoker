@@ -1,42 +1,26 @@
-import dev.shibasis.dependeasy.web.*
-import dev.shibasis.dependeasy.android.*
-import dev.shibasis.dependeasy.common.*
-import dev.shibasis.dependeasy.server.*
-import dev.shibasis.dependeasy.darwin.*
-import dev.shibasis.dependeasy.dependencies.useKoin
+import dev.shibasis.dependeasy.components.library
+import dev.shibasis.dependeasy.model.Compose
+import dev.shibasis.dependeasy.model.Targets
+import dev.shibasis.dependeasy.Versions
 
-plugins {
-//    id("org.jetbrains.compose")
-//    id("org.jetbrains.kotlin.plugin.compose")
-    id("com.android.library")
-    id("dev.shibasis.dependeasy.library")
-}
+plugins { id("dev.shibasis.dependeasy.library") }
 
-kotlin {
-    common {
-        dependencies {
-            api(project(":reaktor-auth"))
+library(namespace = "dev.shibasis.reaktor.google", targets = Targets.All, ui = Compose()) {
+    val generateBindings by bindings()
+    dependencies {
+        common { api(projects.reaktorAuth); api(projects.reaktorWork) }
+        jvm {
+            api(Versions.Google.Sheets)
+            api(Versions.Google.Pubsub)
+            implementation(Versions.Google.Calendar)
+            implementation(Versions.Google.Drive)
+            implementation(Versions.Google.YouTube)
+            api(Versions.Google.Auth)
+            implementation(projects.reaktorCrypto)
+        }
+        jvmTest {
+            implementation(Versions.Data.MockWebServer)
+            implementation(Versions.Data.Postgres)
         }
     }
-    droid {
-        dependencies {
-
-        }
-    }
-    darwin {
-        podDependencies {
-
-        }
-    }
-    web {}
-    server {
-        dependencies {
-            api("com.google.apis:google-api-services-sheets:v4-rev20250211-2.0.0")
-            api("com.google.cloud:google-cloud-pubsub:1.147.0")
-        }
-    }
-}
-
-android {
-    defaults("dev.shibasis.reaktor.google")
 }

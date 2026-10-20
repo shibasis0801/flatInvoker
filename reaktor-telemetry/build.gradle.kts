@@ -1,41 +1,25 @@
-import dev.shibasis.dependeasy.web.*
-import dev.shibasis.dependeasy.android.*
-import dev.shibasis.dependeasy.common.*
-import dev.shibasis.dependeasy.server.*
-import dev.shibasis.dependeasy.darwin.*
+import dev.shibasis.dependeasy.components.library
+import dev.shibasis.dependeasy.handles.Reaktor
+import dev.shibasis.dependeasy.model.Targets
+import dev.shibasis.dependeasy.Versions
+import dev.shibasis.dependeasy.common.commonNetworking
 
-plugins {
-    id("dev.shibasis.dependeasy.library")
-}
+plugins { id("dev.shibasis.dependeasy.library") }
 
-val otelKotlinVersion = "0.1.0"
-val firebaseKotlinVersion = "2.4.0"
-
-kotlin {
-    common {
-        dependencies {
-            api(project(":reaktor-core"))
-            api(project(":reaktor-graph"))
-            api("dev.gitlive:firebase-analytics:$firebaseKotlinVersion")
-            api("io.opentelemetry.kotlin:api:$otelKotlinVersion")
-            api("io.opentelemetry.kotlin:noop:$otelKotlinVersion")
-            implementation("io.opentelemetry.kotlin:implementation:$otelKotlinVersion")
+library(namespace = "dev.shibasis.reaktor.telemetry", targets = Targets.All) {
+    dependencies {
+        common {
+            api(Reaktor.Core)
+            commonNetworking()
+            api(Reaktor.GraphRuntime)
+            api(Versions.Telemetry.Api)
+            api(Versions.Telemetry.Noop)
+            implementation(Versions.Telemetry.Implementation)
+        }
+        commonTest { implementation(Versions.Kotlin.KtorMock) }
+        android {
+            api(project.dependencies.platform(Versions.Android.FirebaseBom))
+            api(Versions.Android.FirebaseKotlinCrashlytics)
         }
     }
-    droid {
-        dependencies {
-            api("dev.gitlive:firebase-crashlytics:$firebaseKotlinVersion")
-        }
-    }
-    darwin {
-        dependencies {
-            api("dev.gitlive:firebase-crashlytics:$firebaseKotlinVersion")
-        }
-    }
-    web {}
-    server {}
-}
-
-android {
-    defaults("dev.shibasis.reaktor.telemetry")
 }

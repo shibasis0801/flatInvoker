@@ -1,26 +1,15 @@
-import dev.shibasis.dependeasy.web.*
-import dev.shibasis.dependeasy.android.*
-import dev.shibasis.dependeasy.common.*
-import dev.shibasis.dependeasy.server.*
-import dev.shibasis.dependeasy.darwin.*
+import dev.shibasis.dependeasy.components.library
+import dev.shibasis.dependeasy.handles.Reaktor
+import dev.shibasis.dependeasy.model.Targets
+import dev.shibasis.dependeasy.native.NativePlatform
+import dev.shibasis.dependeasy.native.NativeAbi
+import dev.shibasis.dependeasy.common.commonSerialization
 
-plugins {
-    id("dev.shibasis.dependeasy.library")
-}
+plugins { id("dev.shibasis.dependeasy.library") }
 
-kotlin {
-    common {
-        dependencies {
-            api(project(":reaktor-core"))
-            commonSerialization()
-        }
-    }
-    web {}
-    droid {}
-    darwin {}
-    server {}
-}
-
-android {
-    defaults("dev.shibasis.reaktor.performance")
+library(namespace = "dev.shibasis.reaktor.performance", targets = Targets.All) {
+    dependencies { common { api(Reaktor.Core); commonSerialization() } }
+    native(name = "ReaktorPerformance", platforms = setOf(NativePlatform.Android, NativePlatform.Darwin, NativePlatform.Host),
+        abis = listOf(NativeAbi.X86, NativeAbi.Arm64, NativeAbi.X86_64))
+    val checkPerformanceTypeScript by typescript()
 }

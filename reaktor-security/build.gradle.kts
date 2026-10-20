@@ -1,61 +1,24 @@
-import dev.shibasis.dependeasy.android.*
-import dev.shibasis.dependeasy.common.*
-import dev.shibasis.dependeasy.darwin.*
-import dev.shibasis.dependeasy.server.*
-import dev.shibasis.dependeasy.web.*
+import dev.shibasis.dependeasy.components.library
+import dev.shibasis.dependeasy.handles.Reaktor
+import dev.shibasis.dependeasy.native.*
+import dev.shibasis.dependeasy.native.NativePlatform
+import dev.shibasis.dependeasy.model.Targets
+import dev.shibasis.dependeasy.Versions
+import dev.shibasis.dependeasy.common.commonCoroutines
 
-plugins {
-    id("dev.shibasis.dependeasy.library")
-}
+plugins { id("dev.shibasis.dependeasy.library") }
 
-val androidOpenSsl = "com.android.ndk.thirdparty:openssl:1.1.1q-beta-1"
-
-dependeasy {
-    androidNative {
-        prefab(
-            cmakeVariable = "OPENSSL_CRYPTO_PREFAB_DIR",
-            dependencyNotation = androidOpenSsl,
-            moduleName = "crypto"
-        )
-        prefab(
-            cmakeVariable = "OPENSSL_SSL_PREFAB_DIR",
-            dependencyNotation = androidOpenSsl,
-            moduleName = "ssl"
-        )
+library(namespace = "dev.shibasis.reaktor.security", targets = Targets.Android + Targets.Apple + Targets.Jvm + Targets.Web) {
+    native(name = "ReaktorSecurity", platforms = setOf(NativePlatform.Android, NativePlatform.Darwin, NativePlatform.Host),
+        abis = listOf(NativeAbi.X86, NativeAbi.Arm64, NativeAbi.X86_64)) {
+        links(Native.OpenSslCrypto, Native.OpenSslSsl)
     }
-
-    darwinNative {
-        packageName = "dev.shibasis.reaktor.security.native"
-        includeDirs(
-            "cpp/rsec-mls-capi/include",
-            "cpp/rsec-mls-core/include"
-        )
-        headers("cpp/rsec-mls-capi/include/rsec/rsec.h")
+    val generateBindings by bindings()
+    appleInterop(packageName = "dev.shibasis.reaktor.security.native", headers = listOf("src/commonMain/cpp/include/rsec/rsec.h"))
+    dependencies {
+        common { commonCoroutines(); api(Reaktor.Core) }
+        jvm { implementation(Versions.Native.Jna) }
+        web { api(Versions.Kotlin.KarakumRuntime) }
+        processors(Reaktor.Compiler)
     }
-}
-
-kotlin {
-    common {
-        dependencies {
-            commonCoroutines()
-            api(project(":reaktor-core"))
-        }
-    }
-
-    droid {
-        dependencies {
-            implementation(androidOpenSsl)
-        }
-    }
-    darwin()
-    server {}
-    web()
-}
-
-dependencies {
-    add("kspCommonMainMetadata", project(":reaktor-compiler"))
-}
-
-android {
-    defaults("dev.shibasis.reaktor.security")
 }
